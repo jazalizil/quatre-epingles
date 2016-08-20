@@ -42,6 +42,7 @@ module.exports = function (grunt) {
         constants: {
           ENV: {
             name: 'development',
+            facebookId: '',
             apiEndpoint: 'http://dev.yoursite.com:10000/'
           }
         }
@@ -289,7 +290,7 @@ module.exports = function (grunt) {
         dest: '<%= yeoman.dist %>/',
         src: [
           '**/*',
-          '!**/*.(scss,sass,css)',
+          '!**/*.(scss,sass,css)'
         ]
       },
       tmp: {
@@ -414,7 +415,8 @@ module.exports = function (grunt) {
     //inject scripts in index.html
     injector: {
       options: {
-        ignorePath: '<%= yeoman.app %>/'
+        ignorePath: '<%= yeoman.app %>/',
+        prefix: '.'
       },
       bowerDependencies: {
         files: {
@@ -537,7 +539,8 @@ module.exports = function (grunt) {
     return grunt.task.run(['init', 'concurrent:ionic']);
   });
   grunt.registerTask('build', function() {
-    return grunt.task.run(['init', 'ionic:build:' + this.args.join()]);
+    grunt.config('concurrent.ionic.tasks', ['ionic:build:' + this.args.join(), 'injector']);
+    return grunt.task.run(['init', 'concurrent:ionic']);
   });
 
   grunt.registerTask('init', [

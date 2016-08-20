@@ -1,3 +1,16 @@
+## Installation
+
+* Requires
+- NodeJs
+- Bower, Cordova, Ionic
+
+* Init
+```
+$ npm install
+$ bower install
+```
+
+
 ## Project Structure
 
 Overview

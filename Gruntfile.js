@@ -16,7 +16,6 @@ module.exports = function (grunt) {
 
   // Define the configuration for all the tasks
   grunt.initConfig({
-
     // Project settings
     yeoman: {
       // configurable paths
@@ -68,7 +67,7 @@ module.exports = function (grunt) {
         tasks: ['newer:copy:app']
       },
       js: {
-        files: ['<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js'],
+        files: ['<%= yeoman.app %>/<%= yeoman.scripts %>/*.js'],
         tasks: ['newer:copy:app', 'newer:jshint:all']
       },
       compass: {
@@ -410,6 +409,25 @@ module.exports = function (grunt) {
           dest: '.temp/concat/<%= yeoman.scripts %>'
         }]
       }
+    },
+    
+    //inject scripts in index.html
+    injector: {
+      options: {
+        ignorePath: '<%= yeoman.app %>/'
+      },
+      bowerDependencies: {
+        files: {
+          '<%= yeoman.app %>/index.html': ['bower.json']
+        }
+      },
+      localDependencies: {
+        files: {
+          '<%= yeoman.dist %>/index.html': [
+              '<%= yeoman.app %>/<%= yeoman.scripts %>/*.js',
+              '<%= yeoman.app %>/<%= yeoman.styles %>/*.css']
+        }
+      }
     }
 
   });
@@ -507,7 +525,7 @@ module.exports = function (grunt) {
       return grunt.task.run(['compress', 'ionic:serve']);
     }
 
-    grunt.config('concurrent.ionic.tasks', ['ionic:serve', 'watch']);
+    grunt.config('concurrent.ionic.tasks', ['ionic:serve', 'watch', 'injector']);
     grunt.task.run(['wiredep', 'init', 'concurrent:ionic']);
   });
   grunt.registerTask('emulate', function() {
